@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import MapExercise from './MapExercise';
 
 // Configuration de l'API - Change automatiquement selon l'environnement
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
@@ -374,57 +375,70 @@ function App() {
             <button className="back-button" onClick={() => fetchChapterDetails(selectedExercise.chapter_id)}>
               ← Retour aux exercices
             </button>
-            <div className="exercise-content">
-              <h2>{selectedExercise.title}</h2>
-              <div className="question">
-                <p>{selectedExercise.content.question}</p>
-                {selectedExercise.content.text && (
-                  <div className="exercise-text">{selectedExercise.content.text}</div>
+            
+            {/* Carte interactive */}
+            {selectedExercise.type === 'map-interactive' ? (
+              <MapExercise 
+                exercise={selectedExercise}
+                onSubmit={(answer, isCorrect) => {
+                  setAnswer(answer);
+                  submitAnswer();
+                }}
+              />
+            ) : (
+              /* Exercices traditionnels */
+              <div className="exercise-content">
+                <h2>{selectedExercise.title}</h2>
+                <div className="question">
+                  <p>{selectedExercise.content.question}</p>
+                  {selectedExercise.content.text && (
+                    <div className="exercise-text">{selectedExercise.content.text}</div>
+                  )}
+                  {selectedExercise.content.image && (
+                    <div className="exercise-image">{selectedExercise.content.image}</div>
+                  )}
+                </div>
+
+                {selectedExercise.type === 'multiple-choice' && (
+                  <div className="options">
+                    {selectedExercise.content.options.map((option, index) => (
+                      <button
+                        key={index}
+                        className={`option ${answer === index.toString() ? 'selected' : ''}`}
+                        onClick={() => setAnswer(index.toString())}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
                 )}
-                {selectedExercise.content.image && (
-                  <div className="exercise-image">{selectedExercise.content.image}</div>
+
+                {['fill-blank', 'math', 'count'].includes(selectedExercise.type) && (
+                  <input
+                    type="text"
+                    className="answer-input"
+                    placeholder="Votre réponse..."
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && submitAnswer()}
+                  />
+                )}
+
+                <button
+                  className="submit-button"
+                  onClick={submitAnswer}
+                  disabled={!answer}
+                >
+                  Valider
+                </button>
+
+                {feedback && (
+                  <div className={`feedback ${feedback.correct ? 'correct' : 'incorrect'}`}>
+                    {feedback.correct ? '✅ Bravo ! Bonne réponse !' : '❌ Essaie encore !'}
+                  </div>
                 )}
               </div>
-
-              {selectedExercise.type === 'multiple-choice' && (
-                <div className="options">
-                  {selectedExercise.content.options.map((option, index) => (
-                    <button
-                      key={index}
-                      className={`option ${answer === index.toString() ? 'selected' : ''}`}
-                      onClick={() => setAnswer(index.toString())}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {['fill-blank', 'math', 'count'].includes(selectedExercise.type) && (
-                <input
-                  type="text"
-                  className="answer-input"
-                  placeholder="Votre réponse..."
-                  value={answer}
-                  onChange={(e) => setAnswer(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && submitAnswer()}
-                />
-              )}
-
-              <button
-                className="submit-button"
-                onClick={submitAnswer}
-                disabled={!answer}
-              >
-                Valider
-              </button>
-
-              {feedback && (
-                <div className={`feedback ${feedback.correct ? 'correct' : 'incorrect'}`}>
-                  {feedback.correct ? '✅ Bravo ! Bonne réponse !' : '❌ Essaie encore !'}
-                </div>
-              )}
-            </div>
+            )}
           </div>
         )}
 

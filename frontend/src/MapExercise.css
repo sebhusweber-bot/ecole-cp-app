@@ -1,0 +1,112 @@
+/* Carte Interactive */
+.map-exercise {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.map-exercise h3 {
+  color: #2C3E50;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.map-exercise .question {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #34495E;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.france-map {
+  display: block;
+  margin: 0 auto 1.5rem;
+  max-width: 100%;
+  height: auto;
+}
+
+.region-circle {
+  transition: all 0.3s ease;
+}
+
+.region-circle:hover {
+  opacity: 1 !important;
+  r: 35;
+  filter: brightness(1.1);
+}
+
+.region-circle:active {
+  transform: scale(0.95);
+}
+
+.selection-info {
+  text-align: center;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #F0F3F4;
+  border-radius: 10px;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selection-info p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #2C3E50;
+}
+
+.selection-info strong {
+  color: #2ECC71;
+  font-size: 1.2rem;
+}
+
+.hint {
+  background: #FFF9E6;
+  border-left: 4px solid #F39C12;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #7D6608;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .map-exercise {
+    padding: 1rem;
+  }
+
+  .france-map {
+    width: 100%;
+    height: auto;
+  }
+
+  .map-exercise h3 {
+    font-size: 1.3rem;
+  }
+
+  .map-exercise .question {
+    font-size: 1.1rem;
+  }
+}
+
+/* Animation pour les régions */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.region-circle.highlight {
+  animation: pulse 2s infinite;
+}
